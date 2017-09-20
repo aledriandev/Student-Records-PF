@@ -8,13 +8,14 @@ function Student (name, teachPoints, lifePoints) {
     this.name = name;
     this.teachPoints = teachPoints;
     this.lifePoints = lifePoints;
+    this.status = 'ACTIVE';
 }
 
 function addStudent() {
-    let name = prompt("Nombre de la estudiante");
-    let teachPoints = prompt("Porcentaje Técnico");
-    let lifePoints = prompt("Porcentaje Habilidades Socio-Emocionales");
-    if (name != '' && teachPoints != '' && lifePoints != ''){
+    let name = prompt("Nombre de la estudiante").toUpperCase();
+    let teachPoints = parseInt(prompt("Porcentaje Técnico"));
+    let lifePoints = parseInt(prompt("Porcentaje Habilidades Socio-Emocionales"));
+    if (name != null && teachPoints != NaN && lifePoints != NaN){
         let student = new Student(name, teachPoints, lifePoints);
         students.push(student);
         return student;
@@ -23,38 +24,43 @@ function addStudent() {
 }
 
 function showStudent(student) {
-    let resultado = '';
+    let result = '';
     if (student != undefined) {
-        resultado = `<div class='row container'>
+        result = `<div class='row container'>
                             <div class='col-md-12'>
                                 <div class='container-student'>
-                                    <p><strong>Nombre:</strong> ${student.name} </p>
-                                    <p><strong>Puntos Técnicos:</strong> ${student.teachPoints}</p>
-                                    <p><strong>Puntos HSE:</strong> ${student.lifePoints}</p>
+                                    <p><strong>${student.name} </strong></p>
+                                    <p><strong>Tech Skills:</strong> ${student.teachPoints}</p>
+                                    <p><strong>Life Skills:</strong> ${student.lifePoints}</p>
+                                    <p><strong>Status:</strong> ${student.status}</p>
                                 </div>
                             </div>
                         </div>`;
     }
-    return resultado;
+    return result;
 }
 
 function showListStudents(students) {
-    var resultado = "";
+    var result = "";
     for(var i in students)
     {
-        resultado += showStudent(students[i]);
+        result += showStudent(students[i]);
     }
-    return resultado;
+    return result;
 }
 
 function dropout(students) {
-
-    return respuesta;
+    students = students.filter(function(student){
+        let condition = (student.teachPoints + student.lifePoints)/2
+        return (condition >= 70 );
+    });
+    return students;
 }
 
 function employability(students) {
     let filtered = students.filter(function(student){
-        return ((student.teachPoints + student.lifePoints)/2 >= 70 );
+        let condition = (student.teachPoints + student.lifePoints)/2
+        return (condition >= 70 );
     });
     return filtered;
 }
@@ -71,10 +77,12 @@ document.getElementById("printAll").onclick=(event)=>{
 };
 document.getElementById("updateDropout").onclick=(event)=>{
     event.preventDefault();
+    students = dropout(students);
+    $('#container-students').html(showListStudents(students));
 };
 document.getElementById("runEmployability").onclick=(event)=>{
     event.preventDefault();
     let students = listStudents();
-    let studentsTopTecnico = employability(students);
-    $('#container-students').html(showListStudents(studentsTopTecnico));
+    let studentsTop = employability(students);
+    $('#container-students').html(showListStudents(studentsTop));
 };
