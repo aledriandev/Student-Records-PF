@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css?family=Fjalla+One');
+
+*{
+    margin: 0 auto;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #FAE4D8;
+}
+
+.btn-success{
+    width: 250px;
+}
